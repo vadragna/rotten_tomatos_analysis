@@ -20,7 +20,7 @@ def advanced_recommender():
     api_key = string
 
     def get_title_from_id(x):
-        title = films[films['id'] == x].values[0][1]
+        title = films[films['id'] == x].values[0][2]
         return title
     
     def get_cluster_from_input(x):
@@ -88,9 +88,12 @@ def advanced_recommender():
         subset = films[films['clusters'] == x].head(10)
         subset = subset.sort_values(by='audienceScore', ascending=False)
         top_10_recommendations = subset.head(10)  
-        random_recommendations = random.sample(top_10_recommendations['title'].tolist(), 3)
-        for recommendation in random_recommendations:
-            st.write(recommendation)
+        try:
+            random_recommendations = random.sample(top_10_recommendations['title'].tolist(), 3)
+            for recommendation in random_recommendations:
+                st.write(recommendation)
+        except:
+            st.write('could not find any recommendation for the inserted title')
 
     def better_recommender():
     
@@ -110,6 +113,7 @@ def advanced_recommender():
                 matching_movies = films.loc[films['id'] == movie_id, 'clusters']       
                 if not matching_movies.empty and matching_movies.values[0] == cluster:
                     st.write('Found a movie according to other reviewers:', title)
+                    st.write('Found a movie according to other reviewers that matches also clusters:', title)
                     return other_reviews
                 else:
                     st.write('Recommendation based on other reviewers', other_reviews_recommender[0][0], ' ', other_reviews_recommender[1][0], ' ', other_reviews_recommender[2][0])
