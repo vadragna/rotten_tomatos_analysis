@@ -12,6 +12,7 @@ from PIL import Image
 # User module files
 #from ml import ml
 from recommender import recommender
+from advanced_recommender import advanced_recommender
 
 def main():
 
@@ -19,7 +20,7 @@ def main():
     # Main page #
     #############
 
-    options = ['Home','Recommender', 'Stop']
+    options = ['Home','Basic Recommender', 'Advanced Recommender', 'Stop']
     choice = st.sidebar.selectbox("Menu",options, key = '1')
 
     if ( choice == 'Home' ):
@@ -27,8 +28,12 @@ def main():
       st.image('./images/cinema.jpeg')
       pass
 
-    elif ( choice == 'Recommender' ):
+    elif ( choice == 'Basic Recommender' ):
       recommender()
+      pass
+
+    elif ( choice == 'Advanced Recommender' ):
+      advanced_recommender()
       pass
 
     else:
