@@ -28,10 +28,10 @@ def recommender():
     def get_recommendation_in_cluster(x):
         subset = films[films['clusters'] == x].head(10)
         subset = subset.sort_values(by='audienceScore', ascending=False)
-        top_10_recommendations = subset.head(10)  
+        top_10_recommendations = subset.head(10)
         random_recommendations = random.sample(top_10_recommendations['title'].tolist(), 3)
-        for recommendation in random_recommendations:
-            print(recommendation)
+        return random_recommendations
+
 
     def basic_recommender():
         user_input = st.text_input('Tell me a movie you like:')
