@@ -13,6 +13,7 @@ from PIL import Image
 #from ml import ml
 from recommender import recommender
 from advanced_recommender import advanced_recommender
+from insights import insights
 
 def main():
 
@@ -20,7 +21,7 @@ def main():
     # Main page #
     #############
 
-    options = ['Home','Basic Recommender', 'Advanced Recommender', 'Stop']
+    options = ['Home', 'Insights','Basic Recommender', 'Advanced Recommender', 'Stop']
     choice = st.sidebar.selectbox("Menu",options, key = '1')
 
     if ( choice == 'Home' ):
@@ -34,6 +35,10 @@ def main():
 
     elif ( choice == 'Advanced Recommender' ):
       advanced_recommender()
+      pass
+
+    elif ( choice == 'Insights' ):
+      insights()
       pass
 
     else:

@@ -11,7 +11,7 @@ def advanced_recommender():
 
     st.title("Not yet convinced? Try this! ")
     st.image('./images/pop_corn.jpg')
-    st.markdown("Picture from https://www.vecteezy.com/")
+    st.markdown("Picture from https://www.vecteezy.com/free-photos")
     films = pd.read_csv('../films_with_clusters.csv')
     grouped_positive_reviews = pd.read_csv('../grouped_reviews.csv')
 

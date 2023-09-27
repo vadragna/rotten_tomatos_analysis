@@ -11,7 +11,7 @@ def recommender():
 
     st.image('./images/recommender.jpg')
 
-    st.markdown("Picture from https://www.vecteezy.com/")
+    st.markdown("Picture from https://www.vecteezy.com/free-photos")
 
     films = pd.read_csv('../films_with_clusters.csv')
 
