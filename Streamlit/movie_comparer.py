@@ -23,7 +23,7 @@ def movie_comparer():
 
     st.title('Still cannot decide between two movies?')
 
-    st.image('./images/confused.jpg')
+    st.image('./images/curtain.jpg')
     st.markdown("Picture from https://www.vecteezy.com/free-photos")
     films = pd.read_csv('../films_NaNs_treated.csv')
     films_non_treated = pd.read_csv('../rotten_tomatoes_movies.csv')
@@ -140,7 +140,6 @@ def movie_comparer():
                     rating1 = ratings1[i]['Value']
                     rating2 = ratings2[i]['Value']
 
-                    st.write('ratings1', ratings1[0]['Source'])
                     source = ratings1[i]['Source']
 
                     if rating1 == rating2:
@@ -154,8 +153,6 @@ def movie_comparer():
         except:
             st.write('Cannot compare other ratings')
         
-        st.write('titles', title1['Title'], title2['Title'])
-        
         st.write('You might find the trailer of ', title1['Title'], ' here: ', generate_youtube_search_url(title1['Title']))
         st.write('You might find the trailer of ', title2['Title'], ' here: ', generate_youtube_search_url(title2['Title']))
 
@@ -167,7 +164,6 @@ def movie_comparer():
             movie_id2 = get_id_from_input(film2)
             moreinfo1 = get_link_and_extras_from_result(movie_id1)
             moreinfo2 = get_link_and_extras_from_result(movie_id2)
-            st.write('moreinfo1', moreinfo1, 'moreinfo2', moreinfo2)
             if moreinfo1['Response'] == 'False' and moreinfo2['Response'] == 'False':
                 st.write('Cannot find info for both movies.', ' please, try with other titles')
             elif moreinfo1['Response'] == 'False':
