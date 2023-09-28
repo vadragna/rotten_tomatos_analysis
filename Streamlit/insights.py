@@ -71,7 +71,7 @@ def insights():
         parts = x.split(' ')
         return parts[0]
 
-    st.title("Distribution of Most Common Languages")
+    st.title("Distribution of Most Frequent Languages")
 
     films['originalLanguage'] = films['originalLanguage'].apply(exclude_language_variety)
 
@@ -104,7 +104,6 @@ def insights():
 
     most_common_languages_df['color'] = most_common_languages_df['originalLanguage'].map(lambda x: language_colors.get(x, 'gray'))
 
-    st.title("Distribution of Most Frequent Languages")
     fig, ax = plt.subplots()
     sns.barplot(x='originalLanguage', y='count', data=most_common_languages_df, palette=most_common_languages_df['color'], ax=ax)
     plt.xticks(rotation=45, ha='right')  # Rotate x-axis labels for better visibility
@@ -112,6 +111,53 @@ def insights():
     plt.ylabel('Frequency')
     plt.title('Distribution of Most Common Languages')
     st.pyplot(fig)
+
+    languages = []
+    means = []
+    medians = []
+    audience_means = []
+    tomato_means = []
+
+    most_common_languages = ['English',
+    'French',
+    'Spanish',
+    'Japanese',
+    'Hindi',
+    'Chinese',
+    'Italian',
+    'German',
+    'Korean',
+    'Portuguese']
+
+
+    for language in most_common_languages:
+        st.write(language)
+        subset = films[films['originalLanguage'] == language]
+
+        non_zero_scores_box_office = subset['boxOffice'][subset['boxOffice'] != 0]
+        non_zero_scores_audience = subset['audienceScore'][subset['audienceScore'] != 0]
+        non_zero_scores_tomato = subset['tomatoMeter'][subset['tomatoMeter'] != 0]
+
+        mean_score_box_office = non_zero_scores_box_office.mean()
+        mean_score_audience = non_zero_scores_audience.mean()
+        mean_score_tomato = non_zero_scores_tomato.mean()
+
+        languages.append(language)
+        means.append(mean_score_box_office)
+        audience_means.append(mean_score_audience)
+        tomato_means.append(mean_score_tomato)
+
+    # Create a DataFrame after calculating the means
+    result_df = pd.DataFrame({
+        'Language': languages,
+        'BoxOffice_Mean': means,
+        'AudienceScore_Mean': audience_means,
+        'TomatoMeter_Mean': tomato_means
+    })
+
+    st.write(result_df)
+
+    result_df.head()
 
 
 
