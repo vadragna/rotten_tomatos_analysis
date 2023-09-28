@@ -188,7 +188,6 @@ def insights():
     films['ReleaseYearTheaters'] = films['releaseDateTheaters'].dt.year
     films['ReleaseYearStreaming'] = films['releaseDateStreaming'].dt.year
 
-    st.title('Movie Release Years Analysis')
 
     fig, ax = plt.subplots(1, 2, figsize=(12, 5))
 
