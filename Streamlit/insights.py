@@ -195,10 +195,102 @@ def insights():
     ax[1].set_xlabel('Year')
     ax[1].set_ylabel('Frequency')
 
-    # Display the plots in the Streamlit app
     st.pyplot(fig)
 
+    films_back_up = films.copy()
+
+    films['genre_list'] = films['genre'].str.split(', | & ')
+    films['num_genres'] = films['genre_list'].apply(len)
+    unique_genres = set(genre for genres in films['genre_list'] for genre in genres)
+
+    for genre in unique_genres:
+        films[genre] = films['genre_list'].apply(lambda x: 1 if genre in x else 0)
+
+    for genre in unique_genres:
+        films.rename(columns={genre: f'g_{genre}'}, inplace=True)
     
+    genre_cols = films.filter(like='g_')
+    g_cols = []
+    g_count = []
+    for col in genre_cols:
+        count_of_ones = (films[col] == 1).sum()
+        g_cols.append(col)
+        g_count.append(count_of_ones)
+    
+    gen_count_df = pd.DataFrame({
+        'Genre': g_cols,
+        'Count': g_count
+    })
+
+
+    gen_count_df_sorted = gen_count_df.sort_values(by='Count', ascending=False)
+
+    gen_count_df = gen_count_df[~gen_count_df['Genre'].isin(['g_Mystery', 'g_unkown'])]
+    gen_count_df_sorted = gen_count_df.sort_values(by='Count', ascending=False)
+
+    gen_count_df.columns = gen_count_df.columns.str.replace('g_', '')
+
+    gen_count_df = gen_count_df[~gen_count_df['Genre'].isin(['Mystery', 'Unknown'])]
+    gen_count_df_sorted = gen_count_df.sort_values(by='Count', ascending=False)
+    gen_count_df_sorted = gen_count_df_sorted.head(7)
+
+    gen_count_df_sorted.columns = gen_count_df_sorted.columns.str.replace('g_', '')
+
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x=gen_count_df_sorted['Genre'], y=gen_count_df_sorted['Count'], order=gen_count_df_sorted['Genre'])
+    plt.title(f'Genre frequency')
+    plt.xlabel('Genre')
+    plt.ylabel('Frequency')
+    plt.xticks(rotation=45, ha='right')
+    st.pyplot(plt)
+
+    means_box_office = []
+    means_tomato_meter = []
+    means_audience_score = []
+
+
+    for genre in gen_count_df_sorted['Genre']:
+        subset = films[films[genre] == 1]
+        
+        non_zero_scores_box_office = subset['boxOffice'][subset['boxOffice'] != 0]    
+        non_zero_scores_audience = subset['audienceScore'][subset['audienceScore'] != 0]
+        non_zero_scores_tomato = subset['tomatoMeter'][subset['tomatoMeter'] != 0]
+        
+        mean_score_box_office = non_zero_scores_box_office.mean()  
+        mean_score_audience = non_zero_scores_audience.mean()    
+        mean_score_tomato = non_zero_scores_tomato.mean()
+
+        means_box_office.append(mean_score_box_office)   
+        means_audience_score.append(mean_score_audience)
+        means_tomato_meter.append(mean_score_tomato)
+
+    result_df_genres = pd.DataFrame({
+        'Genre': gen_count_df_sorted['Genre'],
+        'BoxOffice_Mean': means_box_office,
+        'AudienceScore_Mean': means_audience_score,
+        'TomatoMeter_Mean': means_tomato_meter
+    })
+
+    genre_palette = {
+        'g_Documentary': 'blue',
+        'g_Comedy': 'red',
+        'g_thriller': 'green',
+        'g_Horror': 'purple',
+        'g_Romance': 'orange',
+        'g_Drama': 'cyan',
+        'g_Action': 'teal'
+    }
+
+    for col in result_df_genres.columns[1:]:
+        sorted_df = result_df_genres.sort_values(by=col, ascending=False)
+        
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.barplot(x='Genre', y=col, data=sorted_df, palette=genre_palette)
+        plt.title(f'{col} by Genre (Descending Order)')
+        plt.xlabel('Genre')
+        plt.ylabel(col)
+        plt.xticks(rotation=45, ha='right')
+        st.pyplot(fig)
 
 
 
