@@ -14,6 +14,7 @@ from PIL import Image
 from recommender import recommender
 from advanced_recommender import advanced_recommender
 from insights import insights
+from movie_comparer import movie_comparer
 
 def main():
 
@@ -21,7 +22,7 @@ def main():
     # Main page #
     #############
 
-    options = ['Home', 'Insights','Basic Recommender', 'Advanced Recommender', 'Stop']
+    options = ['Home', 'Insights','Basic Recommender', 'Advanced Recommender', 'Movie Comparer', 'Stop']
     choice = st.sidebar.selectbox("Menu",options, key = '1')
 
     if ( choice == 'Home' ):
@@ -39,6 +40,10 @@ def main():
 
     elif ( choice == 'Insights' ):
       insights()
+      pass
+
+    elif ( choice == 'Movie Comparer' ):
+      movie_comparer()
       pass
 
     else:
