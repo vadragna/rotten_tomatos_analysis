@@ -52,12 +52,12 @@ def movie_comparer():
                 response = requests.get(base_url, params=params)
                 if response.status_code == 200:
                     movie_data = response.json()  
-                    st.write('I am going to take the data for ', movie_data['Title'], ' from ', movie_data['Year'], ' by ', movie_data['Director'])
+                    st.write('I am going to garther data for ', movie_data['Title'], ' from ', movie_data['Year'], ' by ', movie_data['Director'])
                     break
                 else:
-                    st.write('API request failed with status code:', response.status_code)
+                    print('API request failed with status code:', response.status_code)
             except requests.ConnectionError:
-                st.write('connection error, will retry')
+                print('connection error, will retry')
                 time.sleep(12)
         
         matching_titles = films[(films['title'].str.lower() == x) & (films['director'].str.lower() == movie_data['Director'].lower())]

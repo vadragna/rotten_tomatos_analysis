@@ -22,6 +22,13 @@ def insights():
     st.write('Summary Statistics for Audience Scores:')
     st.write(non_zero_scores_as.describe())
 
+    fig, ax = plt.subplots()
+    ax.boxplot(non_zero_scores_as)
+    ax.set_xlabel('Audience Score')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Boxplot of Audience Scores')
+    st.pyplot(fig)
+
     st.write('Distribution of Audience Scores (when present):')
     fig, ax = plt.subplots()
     ax.hist(non_zero_scores_as, bins=20, edgecolor='black')
@@ -106,10 +113,10 @@ def insights():
 
     fig, ax = plt.subplots()
     sns.barplot(x='originalLanguage', y='count', data=most_common_languages_df, palette=most_common_languages_df['color'], ax=ax)
-    plt.xticks(rotation=45, ha='right')  # Rotate x-axis labels for better visibility
+    plt.xticks(rotation=45, ha='right')  
     plt.xlabel('Language')
     plt.ylabel('Frequency')
-    plt.title('Distribution of Most Common Languages')
+    plt.title('Distribution of Most Frequent Languages')
     st.pyplot(fig)
 
     languages = []
@@ -153,7 +160,7 @@ def insights():
         'TomatoMeter_Mean': tomato_means
     })
 
-    st.write('result_df.head')
+    st.write('Grouped Languages Table')
     st.write(result_df.head(10))
 
 

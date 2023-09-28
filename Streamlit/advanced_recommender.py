@@ -46,7 +46,7 @@ def advanced_recommender():
                 response = requests.get(base_url, params=params)
                 if response.status_code == 200:
                     movie_data = response.json()  
-                    st.write('Searching for similiar movies to ', movie_data['Title'], ' from ', movie_data['Year'], ' by ', movie_data['Director'])
+                    st.write('Searching for other movies you might like, if you like ', movie_data['Title'], ' from ', movie_data['Year'], ' by ', movie_data['Director'])
                     break
                 else:
                     st.write('API request failed with status code:', response.status_code)
@@ -161,7 +161,7 @@ def advanced_recommender():
                         show_more_info(more_info)
                         st.write(generate_youtube_search_url(title))
                     except:
-                        st.write('No more info found: ')
+                        st.write('No more extra info found')
                     return other_reviews
                 else:
                     rec_title = get_title_from_id(other_reviews_recommender[0][0])
@@ -176,7 +176,7 @@ def advanced_recommender():
                         show_more_info(more_info)
                         st.write(generate_youtube_search_url(title))
                     except:
-                        st.write('No more info found: ')
+                        st.write('No more extra info found')
                     return 
     
     better_recommender()
