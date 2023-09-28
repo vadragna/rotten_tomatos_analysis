@@ -131,7 +131,6 @@ def insights():
 
 
     for language in most_common_languages:
-        st.write(language)
         subset = films[films['originalLanguage'] == language]
 
         non_zero_scores_box_office = subset['boxOffice'][subset['boxOffice'] != 0]
@@ -147,7 +146,6 @@ def insights():
         audience_means.append(mean_score_audience)
         tomato_means.append(mean_score_tomato)
 
-    # Create a DataFrame after calculating the means
     result_df = pd.DataFrame({
         'Language': languages,
         'BoxOffice_Mean': means,
@@ -155,9 +153,52 @@ def insights():
         'TomatoMeter_Mean': tomato_means
     })
 
-    st.write(result_df)
+    st.write('result_df.head')
+    st.write(result_df.head(10))
 
-    result_df.head()
+
+    for col in result_df.columns[1:]:
+        sorted_df = result_df.sort_values(by=col, ascending=False)
+        plt.figure(figsize=(10, 6))
+        sns.barplot(x='Language', y=col, data=sorted_df, palette=language_colors)
+        plt.title(f'{col} by Language (Descending Order)')
+        plt.xlabel('Language')
+        plt.ylabel(col)
+        plt.xticks(rotation=45, ha='right')
+        st.pyplot(plt)
+
+    st.title('Release Dates')
+
+    films['releaseDateTheaters'] = pd.to_datetime(films['releaseDateTheaters'])
+    films['releaseDateStreaming'] = pd.to_datetime(films['releaseDateStreaming'])
+
+    films['ReleaseYearTheaters'] = films['releaseDateTheaters'].dt.year
+    films['ReleaseYearStreaming'] = films['releaseDateStreaming'].dt.year
+
+    films['releaseDateTheaters'] = pd.to_datetime(films['releaseDateTheaters'])
+    films['releaseDateStreaming'] = pd.to_datetime(films['releaseDateStreaming'])
+
+    films['ReleaseYearTheaters'] = films['releaseDateTheaters'].dt.year
+    films['ReleaseYearStreaming'] = films['releaseDateStreaming'].dt.year
+
+    st.title('Movie Release Years Analysis')
+
+    fig, ax = plt.subplots(1, 2, figsize=(12, 5))
+
+    sns.histplot(films['ReleaseYearTheaters'][films['ReleaseYearTheaters'] != 1800], bins=20, kde=True, ax=ax[0])
+    ax[0].set_title('Release Years in Theaters')
+    ax[0].set_xlabel('Year')
+    ax[0].set_ylabel('Frequency')
+
+    sns.histplot(films['ReleaseYearStreaming'][films['ReleaseYearStreaming'] != 1800], bins=20, kde=True, ax=ax[1])
+    ax[1].set_title('Release Years on Streaming Platforms')
+    ax[1].set_xlabel('Year')
+    ax[1].set_ylabel('Frequency')
+
+    # Display the plots in the Streamlit app
+    st.pyplot(fig)
+
+    
 
 
 
